@@ -9,6 +9,11 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    shopId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Shop",
+        required: true,
+    },
 });
 
 module.exports = mongoose.model("Blog", blogSchema);

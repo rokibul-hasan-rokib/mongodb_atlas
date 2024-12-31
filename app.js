@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const blogRoutes = require("./routes/blog.routes");
 const userRoutes = require("./routes/user.routes");
+const shopRoutes = require("./routes/shop.routes");
 
 
 app.use(express.json());
@@ -16,5 +17,7 @@ app.set("views", "views");
 
 app.use("/api", blogRoutes);
 app.use("/api", userRoutes);
+app.use("/api", shopRoutes);
+
 
 module.exports = app;

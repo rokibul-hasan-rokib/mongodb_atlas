@@ -1,4 +1,5 @@
 const blogModel = require("../models/blog.model");
+const shopModel = require("../models/shop.model");
 
 exports.getAllBlogs = async (req, res) => {
   try {
@@ -18,44 +19,77 @@ exports.getAllBlogs = async (req, res) => {
 };
 
 exports.createBlog = async (req, res) => {
-  const { title, description } = req.body;
-
   try {
-    const blog = await blogModel.create({
+    const { title, description, shopId } = req.body;
+    const shop = await shopModel.findById(shopId);
+    if (!shop) {
+      return res.status(404).json({
+        success: false,
+        message: "Shop not found",
+      });
+    }
+    const newBlog = await blogModel.create({
       title,
       description,
+      shopId,
     });
-    res.status(200).json({
+
+    res.status(201).json({
       success: true,
       message: "Blog created successfully",
-      blog,
+      blog: newBlog,
     });
   } catch (error) {
-    res.status(404).json({
+    console.error(error);
+    res.status(500).json({
       success: false,
-      message: "Blog Not Found",
-      error,
+      message: "Failed to create blog",
+      error: error.message,
     });
   }
 };
 
 exports.blogUpdate = async (req, res) => {
   try {
-    const blog = await blogModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-      useFindAndModify: false,
-    });
+    const { title, description, shopId } = req.body;
+    const blogId = req.params.id;
+    const blog = await blogModel.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+    if (shopId) {
+      const shop = await shopModel.findById(shopId);
+      if (!shop) {
+        return res.status(404).json({
+          success: false,
+          message: "Shop not found",
+        });
+      }
+    }
+    const updatedBlog = await blogModel.findByIdAndUpdate(
+      blogId,
+      {
+        title: title || blog.title,
+        description: description || blog.description,
+        shopId: shopId || blog.shopId,
+      },
+      { new: true, runValidators: true }
+    );
+
     res.status(200).json({
       success: true,
-      message: "Blog Updated Successfully",
-      blog,
+      message: "Blog updated successfully",
+      blog: updatedBlog,
     });
   } catch (error) {
-    res.status(404).json({
+    console.error(error);
+    res.status(500).json({
       success: false,
-      message: "Blog Not Found",
-      error,
+      message: "Failed to update blog",
+      error: error.message,
     });
   }
 };
@@ -75,7 +109,7 @@ exports.blogDelete = async (req, res) => {
       error,
     });
   }
-}
+};
 
 exports.getBlogById = async (req, res) => {
   try {
@@ -92,4 +126,4 @@ exports.getBlogById = async (req, res) => {
       error,
     });
   }
-}
+};
