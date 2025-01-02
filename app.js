@@ -6,6 +6,7 @@ const app = express();
 const blogRoutes = require("./routes/blog.routes");
 const userRoutes = require("./routes/user.routes");
 const shopRoutes = require("./routes/shop.routes");
+const settingRoutes = require("./routes/setting.routes");
 
 
 app.use(express.json());
@@ -27,6 +28,8 @@ app.get('/about', (req, res) => {
 app.use("/api", blogRoutes);
 app.use("/api", userRoutes);
 app.use("/api", shopRoutes);
+app.use("/api", settingRoutes);
+
 
 
 module.exports = app;
