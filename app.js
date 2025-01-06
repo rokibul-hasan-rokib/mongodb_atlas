@@ -16,9 +16,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", "views");
+ 
 
 app.get('/', (req, res) => {
-    res.render('home', { title: 'About Page', layout: 'app' })
+    res.render('home', { title: 'Home Page', layout: 'app' })
 });
 app.get('/about', (req, res) => {
     res.render('about', { title: 'About Page', layout: 'app' })

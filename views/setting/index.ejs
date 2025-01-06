@@ -1,0 +1,19 @@
+<h1><%= title %></h1>
+
+  <% if (settings.length > 0) { %>
+    <ul>
+      <% settings.forEach(setting => { %>
+        <li>
+          <strong>Name:</strong> <%= setting.name %><br>
+          <% if (setting.image) { %>
+            <img src="<%= `/images/${setting.image}` %>" alt="<%= setting.name %>" width="200" />
+            <% } else { %>
+            <em>No image available</em>
+          <% } %>
+        </li>
+        <hr>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No settings found.</p>
+  <% } %>

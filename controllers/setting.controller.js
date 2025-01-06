@@ -2,15 +2,14 @@ const settingModel = require("../models/setting.model");
 
 exports.getAllSettings = async (req, res) => {
   try {
-    const settings = await settingModel.find({});
-    res.status(200).json({
-      success: true,
-      message: "Settings get successfully",
-      settings,
+    const settings = await settingModel.find({}); 
+    res.render("setting/index", {
+      title: "Settings List",
+      layout: "app",
+      settings, 
     });
   } catch (error) {
-    res.status(404).json({
-      success: false,
+    res.status(404).render("error", {
       message: "Settings Not Found",
       error,
     });
